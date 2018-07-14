@@ -1,0 +1,37 @@
+[user]
+  email = waldyr.ar@gmail.com
+  name = Waldyr de Souza
+[interactive]
+  singlekey = true
+[fetch]
+  prune = true
+[pull]
+  rebase = true
+  default = current
+[clean]
+  requireFalse = false
+[advice]
+  statusHints = false
+[color]
+  ui = auto
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  grep = auto
+[alias]
+  a = add
+  b = branch
+  c = commit --message
+  ce = commit --amend --no-edit
+  co = checkout
+  d = diff
+  f = fetch
+  l = log --graph --oneline --all --abbrev-commit --decorate
+  pl = pull
+  pr = "!f() { git push --set-upstream origin HEAD && gh pr create --fill; }; f"
+  ps = push
+  s = status
+  st = stash
+[push]
+  default = current

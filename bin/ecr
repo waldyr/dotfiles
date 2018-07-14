@@ -1,0 +1,13 @@
+#!/bin/bash
+
+trap 'pkill -P $$' SIGINT SIGTERM
+
+cd $(git rev-parse --show-toplevel)
+
+cd backend
+bundle exec sidekiq &
+bundle exec rails s -p 3001 &
+
+cd ..
+cd frontend
+yarn serve

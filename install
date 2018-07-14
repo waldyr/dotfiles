@@ -1,0 +1,27 @@
+#!/bin/bash
+
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+
+BASE=$(pwd)
+
+# backup
+mkdir -pv bak/hooks
+mkdir -pv bak/bin
+
+# rc
+for rc in *rc *profile agignore gitconfig; do
+  [ -e ~/."$rc" ] && mv -v ~/."$rc" bak/."$rc"
+  ln -svf "$BASE/$rc" ~/."$rc"
+done
+
+# scripts
+mkdir -pv ~/bin
+for bin in $BASE/bin/*; do
+  ln -svf "$bin" ~/bin
+done
+
+# vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+vim +PlugInstall +qall
