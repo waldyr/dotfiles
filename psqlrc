@@ -1,0 +1,13 @@
+\set QUIET on
+
+SELECT version / 10000 || '.' || (version / 100) % 100 || '.' || version % 100 AS pg_version FROM (SELECT current_setting('server_version_num')::int AS version) v \gset
+
+\set PROMPT1 '%n@%/(%:pg_version:) '
+
+\set COMP_KEYWORD_CASE upper
+\timing
+\x auto
+\pset null '¤'
+\set PSQL_EDITOR vim
+
+\set QUIET off

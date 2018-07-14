@@ -1,0 +1,39 @@
+[user]
+	email = waldyr.ar@gmail.com
+	name = Waldyr de Souza
+[interactive]
+	singlekey = true
+[fetch]
+  prune = true
+[pull]
+  rebase = true
+[clean]
+  requireFalse = false
+[advice]
+	statusHints = false
+[init]
+	templatedir = ~/.git_template
+[color]
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	grep = auto
+[diff "ruby"]
+	funcname = "^ *\\(\\(def\\) .*\\)"
+[alias]
+  a = add
+  b = branch
+  c = commit --message
+  ce = commit --amend --no-edit
+  co = checkout
+  d = diff
+  f = fetch
+  l = log
+  lg = log --graph --oneline --all --abbrev-commit --decorate
+  pl = pull
+  pr = "!f() { hub pull-request; }; f"
+  ps = push
+  s = status
+  st = stash

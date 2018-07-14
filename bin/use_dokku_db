@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'json'
+
+DATABASE_FILE = 'backend/config/database.yml'
+USAGE = "\nUSAGE: #{File.basename(__FILE__)} [remote_name] [adapter:postgresql] [encoding:unicode]"
+
+remote_name = ARGV[0]
+adapter = ARGV[1] || 'postgresql'
+encoding = ARGV[2] || 'unicode'
+
+puts USAGE or return if remote_name.nil?
+
+dokku_config = `dokku config --remote=#{remote_name} 2>/dev/null`
+dokku_config = Hash[dokku_config.gsub(/\r\n/, ',')
+                                .gsub(/[ ]+/, '')
+                                .split(',')
+                                .drop(1)
+                                .map { |c| c.split(':', 2) }]
+
+new_config = {
+  'development' => {
+    'adapter' => adapter,
+    'encoding' => encoding,
+    'host' => dokku_config['DATABASE_HOST'],
+    'database' => dokku_config['DATABASE_NAME'],
+    'username' => dokku_config['DATABASE_USER'],
+    'password' => dokku_config['DATABASE_PASSWORD']
+  }
+}
+
+File.write(DATABASE_FILE, new_config.to_yaml)

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+
+BASE=$(pwd)
+
+# backup
+mkdir -pv bak/hooks
+mkdir -pv bak/bin
+
+# rc
+for rc in *rc *profile agignore gitconfig; do
+  [ -e ~/."$rc" ] && mv -v ~/."$rc" bak/."$rc"
+  ln -svf "$BASE/$rc" ~/."$rc"
+done
+
+# git_template
+mkdir -pv ~/.git_template/hooks
+for hook in $BASE/hooks/*; do
+  ln -svf "$hook" ~/.git_template/hooks
+done
+
+# scripts
+mkdir -pv ~/bin
+for bin in $BASE/bin/*; do
+  ln -svf "$bin" ~/bin
+done
+
+# git-prompt
+[ -e ~/.git-prompt.sh ] && mv -v ~/.git-prompt.sh bak/.git-prompt.sh
+curl -Lo ~/.git-prompt.sh \
+  https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+
+# git-completion
+[ -e ~/.git-completion.bash ] && mv -v ~/.git-completion.bash bak/.git-completion.bash
+curl -Lo ~/.git-completion.bash \
+  https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+
+# vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+vim +PlugInstall +qall

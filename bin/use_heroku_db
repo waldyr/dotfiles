@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'json'
+
+DATABASE_FILE = 'config/database.yml'
+USAGE = "\nUSAGE: #{File.basename(__FILE__)} [remote_name] [adapter:postgresql] [encoding:unicode]"
+
+remote_name = ARGV[0]
+adapter = ARGV[1] || 'postgresql'
+encoding = ARGV[2] || 'unicode'
+
+puts USAGE or return if remote_name.nil?
+
+heroku_config = JSON.parse(`heroku config --json --remote=#{remote_name} 2>/dev/null`)
+
+new_config = {
+  'development' => {
+    'adapter' => adapter,
+    'encoding' => encoding,
+    'pool' => heroku_config['DB_POOL'],
+    'host' => heroku_config['DB_HOSTNAME'],
+    'database' => heroku_config['DB_NAME'],
+    'username' => heroku_config['DB_USERNAME'],
+    'password' => heroku_config['DB_PASSWORD']
+  }
+}
+
+config = YAML.load_file(DATABASE_FILE)
+
+config.merge!(new_config)
+
+File.write(DATABASE_FILE, config.to_yaml)
